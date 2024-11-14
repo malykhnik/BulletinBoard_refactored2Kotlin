@@ -8,7 +8,10 @@ import jakarta.persistence.*
 class User (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int
+    val id: Long,
+    val email: String,
+    val password: String,
+    val role: Role
 ) {
 
 }
