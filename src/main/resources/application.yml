@@ -1,0 +1,19 @@
+server:
+  port: 8800
+spring:
+  application:
+    name: Bulletin_board
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bulletin_kotlin
+    password: postgres
+    username: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
