@@ -26,7 +26,7 @@ class UserServiceImpl(
         }
     }
 
-    override fun findAll(): List<User> {
+    override fun getAllUsers(): List<User> {
         val users = userRepo.findAll()
         if (users.isEmpty()) {
             throw UsersNotFoundException("No users found")
