@@ -1,4 +1,4 @@
-package com.malykhnik.bulletinboard_kotlin.service
+package com.malykhnik.bulletinboard_kotlin.service.business_logic
 
 import com.malykhnik.bulletinboard_kotlin.entity.User
 

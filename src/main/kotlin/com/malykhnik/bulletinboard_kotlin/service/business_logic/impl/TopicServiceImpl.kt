@@ -1,10 +1,10 @@
-package com.malykhnik.bulletinboard_kotlin.service.impl
+package com.malykhnik.bulletinboard_kotlin.service.business_logic.impl
 
 import com.malykhnik.bulletinboard_kotlin.entity.Topic
 import com.malykhnik.bulletinboard_kotlin.exception.custom_exception.topic_exceptions.TopicAlreadyExistsException
 import com.malykhnik.bulletinboard_kotlin.exception.custom_exception.topic_exceptions.TopicsNotFoundException
 import com.malykhnik.bulletinboard_kotlin.repository.TopicRepository
-import com.malykhnik.bulletinboard_kotlin.service.TopicService
+import com.malykhnik.bulletinboard_kotlin.service.business_logic.TopicService
 import org.springframework.stereotype.Service
 
 @Service
