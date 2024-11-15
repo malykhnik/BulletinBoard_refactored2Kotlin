@@ -3,7 +3,7 @@ package com.malykhnik.bulletinboard_kotlin.rest
 import com.malykhnik.bulletinboard_kotlin.dto.auth_dto.UserRequestDto
 import com.malykhnik.bulletinboard_kotlin.dto.auth_dto.UserResponseDto
 import com.malykhnik.bulletinboard_kotlin.entity.User
-import com.malykhnik.bulletinboard_kotlin.service.UserService
+import com.malykhnik.bulletinboard_kotlin.service.business_logic.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
