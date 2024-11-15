@@ -11,6 +11,7 @@ class User (
     val id: Long,
     val email: String,
     val password: String,
+    @Enumerated(EnumType.ORDINAL)
     val role: Role
 ) {
 

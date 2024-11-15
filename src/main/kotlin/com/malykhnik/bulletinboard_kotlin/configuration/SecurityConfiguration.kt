@@ -22,30 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableConfigurationProperties(JwtProperties::class)
-class SecurityConfiguration(
-    private val authProvider: AuthenticationProvider
-) {
-    @Bean
-    fun securityFilterChain(
-        http: HttpSecurity,
-        jwtAuthenticationFilter: JwtAuthFilter
-    ): DefaultSecurityFilterChain {
-        http
-            .csrf { it.disable() }
-            .authorizeHttpRequests {
-                it
-                    .requestMatchers("/api/auth", "api/auth/refresh", "/error").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
-                    .requestMatchers("/api/user**").hasRole("ADMIN")
-                    .anyRequest().fullyAuthenticated()
-            }
-            .sessionManagement {
-                it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            }
-            .authenticationProvider(authProvider)
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
-        return http.build()
-    }
+class SecurityConfiguration {
     @Bean
     fun userDetailsService(userRepository: UserRepository): UserDetailsService =
         MyUserDetailsService(userRepository)
