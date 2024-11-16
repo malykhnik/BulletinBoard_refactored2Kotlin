@@ -24,4 +24,9 @@ class TopicServiceImpl(
         }
         return topics
     }
+
+    override fun getTopicById(id: Long): Topic {
+        return topicRepo.findById(id)
+            .orElseThrow { TopicsNotFoundException("Topic with id $id not found") }
+    }
 }

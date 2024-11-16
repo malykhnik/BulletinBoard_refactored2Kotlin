@@ -6,6 +6,7 @@ import com.malykhnik.bulletinboard_kotlin.entity.Message
 import com.malykhnik.bulletinboard_kotlin.entity.Topic
 import com.malykhnik.bulletinboard_kotlin.service.business_logic.MessageService
 import com.malykhnik.bulletinboard_kotlin.service.business_logic.TopicService
+import com.malykhnik.bulletinboard_kotlin.util.WorkWithAuth
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -41,7 +42,7 @@ fun TopicDto.toEntity(): Topic {
         this.messages.map { messageDto ->
             Message(
                 id = messageDto.id,
-                author = messageDto.author,
+                author = WorkWithAuth.getUsernameByAuthUser(),
                 message = messageDto.message,
                 date = messageDto.date,
                 topic = topic

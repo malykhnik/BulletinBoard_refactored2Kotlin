@@ -5,4 +5,5 @@ import com.malykhnik.bulletinboard_kotlin.entity.Topic
 interface TopicService {
     fun createTopic(topic: Topic): Topic
     fun getAllTopics(): List<Topic>
+    fun getTopicById(id: Long): Topic
 }
