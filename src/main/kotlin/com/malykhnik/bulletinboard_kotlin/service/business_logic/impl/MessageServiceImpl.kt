@@ -10,6 +10,7 @@ import com.malykhnik.bulletinboard_kotlin.exception.custom_exception.topic_excep
 import com.malykhnik.bulletinboard_kotlin.repository.MessageRepository
 import com.malykhnik.bulletinboard_kotlin.service.business_logic.MessageService
 import com.malykhnik.bulletinboard_kotlin.util.WorkWithAuth
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
@@ -45,7 +46,8 @@ class MessageServiceImpl(
         val messageEntity = messageRepo.findById(messageId).get()
         val topic = messageEntity.topic
         if (checkMessagesInTopic(topic)) {
-            return messageRepo.deleteById(messageId)
+            topic.messages.remove(messageEntity)
+            return messageRepo.delete(messageEntity)
         }
         throw CountMessagesInTopicException("Message in topic could not be equal 0")
     }
