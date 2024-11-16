@@ -7,5 +7,6 @@ import com.malykhnik.bulletinboard_kotlin.entity.Topic
 interface MessageService {
     fun getMessagesByTopicId(topicId: Long): List<Message>
     fun createMessage(message: Message): Message
-    fun updateMessage(topic: Topic, messageDtoForUpdate: MessageDtoForUpdate): Message
+    fun updateMessage(messageId: Long, messageDtoForUpdate: MessageDtoForUpdate): Message
+    fun deleteMessage(messageId: Long)
 }

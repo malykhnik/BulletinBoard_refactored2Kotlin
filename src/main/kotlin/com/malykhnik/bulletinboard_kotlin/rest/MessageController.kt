@@ -8,6 +8,7 @@ import com.malykhnik.bulletinboard_kotlin.service.business_logic.MessageService
 import com.malykhnik.bulletinboard_kotlin.service.business_logic.TopicService
 import com.malykhnik.bulletinboard_kotlin.util.WorkWithAuth
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -36,12 +37,17 @@ class MessageController(
         return ResponseEntity.ok(messageService.createMessage(messageEntity).toDto())
     }
 
-    @PatchMapping("/{topicId}")
-    fun updateMessageByUserEmailAndTopicId(@PathVariable(name = "topicId") topicId: Long,
+    @PatchMapping("/{messageId}")
+    fun updateMessageByMessageIdAndAuthor(@PathVariable(name = "messageId") messageId: Long,
                                            @RequestBody messageDtoForUpdate: MessageDtoForUpdate
     ): ResponseEntity<MessageDto> {
-        val topicEntity = topicService.getTopicById(topicId)
-        return ResponseEntity.ok(messageService.updateMessage(topicEntity, messageDtoForUpdate).toDto())
+        return ResponseEntity.ok(messageService.updateMessage(messageId, messageDtoForUpdate).toDto())
+    }
+
+    @DeleteMapping("/{messageId}")
+    fun deleteMessageByMessageIdAndAuthor(@PathVariable(name = "messageId") messageId: Long
+    ): ResponseEntity<Unit> {
+        return ResponseEntity.ok(messageService.deleteMessage(messageId).toDto())
     }
 }
 

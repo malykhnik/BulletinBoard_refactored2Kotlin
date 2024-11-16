@@ -40,9 +40,9 @@ fun TopicDto.toEntity(): Topic {
         this.messages.map { messageDto ->
             Message(
                 id = messageDto.id,
-                author = WorkWithAuth.getUsernameByAuthUser(),
+                author = WorkWithAuth.getUsernameByAuthUser()!!,
                 message = messageDto.message,
-                date = messageDto.date,
+                date = messageDto.date!!,
                 topic = topic
             )
         }
