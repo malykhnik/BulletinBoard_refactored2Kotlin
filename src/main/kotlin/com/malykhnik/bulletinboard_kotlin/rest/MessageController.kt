@@ -47,7 +47,7 @@ class MessageController(
     @DeleteMapping("/{messageId}")
     fun deleteMessageByMessageIdAndAuthor(@PathVariable(name = "messageId") messageId: Long
     ): ResponseEntity<Unit> {
-        return ResponseEntity.ok(messageService.deleteMessage(messageId).toDto())
+        return ResponseEntity.ok(messageService.deleteMessage(messageId))
     }
 }
 
