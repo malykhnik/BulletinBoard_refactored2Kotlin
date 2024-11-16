@@ -1,7 +1,7 @@
 package com.malykhnik.bulletinboard_kotlin.rest
 
-import com.malykhnik.bulletinboard_kotlin.dto.MessageDto
-import com.malykhnik.bulletinboard_kotlin.dto.TopicDto
+import com.malykhnik.bulletinboard_kotlin.dto.message_dto.MessageDto
+import com.malykhnik.bulletinboard_kotlin.dto.message_dto.MessageDtoForUpdate
 import com.malykhnik.bulletinboard_kotlin.entity.Message
 import com.malykhnik.bulletinboard_kotlin.entity.Topic
 import com.malykhnik.bulletinboard_kotlin.service.business_logic.MessageService
@@ -29,21 +29,28 @@ class MessageController(
 
     @PostMapping("/{topicId}")
     fun createMessageInTopicById(@PathVariable(name = "topicId") topicId: Long,
-                                 @RequestBody messageDto: MessageDto): ResponseEntity<MessageDto> {
+                                 @RequestBody messageDto: MessageDto
+    ): ResponseEntity<MessageDto> {
         val topicEntity = topicService.getTopicById(topicId)
         val messageEntity = messageDto.toEntity(topicEntity)
         return ResponseEntity.ok(messageService.createMessage(messageEntity).toDto())
     }
-//
-//    @PatchMapping("/{topicId}")
+
+    @PatchMapping("/{topicId}")
+    fun updateMessageByUserEmailAndTopicId(@PathVariable(name = "topicId") topicId: Long,
+                                           @RequestBody messageDtoForUpdate: MessageDtoForUpdate
+    ): ResponseEntity<MessageDto> {
+        val topicEntity = topicService.getTopicById(topicId)
+        return ResponseEntity.ok(messageService.updateMessage(topicEntity, messageDtoForUpdate).toDto())
+    }
 }
 
 fun MessageDto.toEntity(topic: Topic): Message {
     return Message(
         id = this.id,
-        author = WorkWithAuth.getUsernameByAuthUser(),
+        author = WorkWithAuth.getUsernameByAuthUser()!!,
         message = this.message,
-        date = this.date,
+        date = this.date!!,
         topic = topic
     )
 }

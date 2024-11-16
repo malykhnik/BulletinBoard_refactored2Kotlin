@@ -10,7 +10,7 @@ class Message(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
-    val author: String? = null,
+    val author: String,
     val message: String,
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     val date: Date,
