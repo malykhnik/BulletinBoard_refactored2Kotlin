@@ -6,6 +6,6 @@ import com.malykhnik.bulletinboard_kotlin.entity.Topic
 data class TopicDto(
     val id: Long,
     val title: String,
-    val messages: MutableList<Message> = mutableListOf()
+    val messages: MutableList<MessageDto> = mutableListOf()
 )
 

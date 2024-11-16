@@ -9,9 +9,13 @@ import java.util.Date
 class Message(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int,
+    val id: Long,
     val author: String,
     val message: String,
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    val date: Date
+    val date: Date,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "topic_id")
+    val topic: Topic
 )
