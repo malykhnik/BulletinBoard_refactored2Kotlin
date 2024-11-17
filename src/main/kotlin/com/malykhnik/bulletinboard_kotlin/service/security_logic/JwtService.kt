@@ -1,6 +1,7 @@
 package com.malykhnik.bulletinboard_kotlin.service.security_logic
 
 import com.malykhnik.bulletinboard_kotlin.configuration.properties.JwtProperties
+import com.malykhnik.bulletinboard_kotlin.exception.custom_exception.token_exception.TokenExpiredException
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
@@ -32,7 +33,10 @@ class JwtService(
 
     fun isValid(token: String, userDetails: UserDetails): Boolean {
         val email = extractEmail(token)
-        return userDetails.username == email && !isExpired(token)
+        if (isExpired(token)) {
+            throw TokenExpiredException("Token has expired")
+        }
+        return userDetails.username == email
     }
 
     fun extractEmail(token: String): String? =
