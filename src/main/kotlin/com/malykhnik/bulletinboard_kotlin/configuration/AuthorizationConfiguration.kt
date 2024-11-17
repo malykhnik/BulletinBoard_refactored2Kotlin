@@ -23,7 +23,7 @@ class AuthorizationConfiguration(
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
-                    .requestMatchers("/api/auth","/api/user/save", "api/auth/refresh", "/error").permitAll()
+                    .requestMatchers("/api/auth","/api/user/save", "/api/auth/refreshJwt", "/error").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
                     .requestMatchers("/admin/api/topics", "/admin/api/messages").hasRole("ADMIN")
                     .anyRequest().fullyAuthenticated()

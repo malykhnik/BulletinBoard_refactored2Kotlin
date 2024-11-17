@@ -20,5 +20,5 @@ spring:
 
 jwt:
   key: weqjfnqbewfoi2371432yogr8qfwwgefb1ffh17803gf18g34fbasdsaf134fqf
-  access-token-expiration: 3600000
-  refresh-token-expiration: 86400000
+  access-token-expiration: 60000
+  refresh-token-expiration: 180000

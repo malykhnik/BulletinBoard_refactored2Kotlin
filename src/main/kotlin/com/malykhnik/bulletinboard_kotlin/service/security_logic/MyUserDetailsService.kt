@@ -13,8 +13,8 @@ typealias ApplicationUser = com.malykhnik.bulletinboard_kotlin.entity.User
 class MyUserDetailsService(
     private val userRepo: UserRepository
 ): UserDetailsService {
-    override fun loadUserByUsername(username: String): UserDetails =
-        userRepo.findByEmail(username)
+    override fun loadUserByUsername(email: String): UserDetails =
+        userRepo.findByEmail(email)
             ?.mapToUserDetails()
             ?: throw UsernameNotFoundException("Not found!")
 

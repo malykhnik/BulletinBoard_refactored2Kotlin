@@ -11,19 +11,19 @@ import java.util.*
 
 @Service
 class JwtService(
-    private val jwtProperties: JwtProperties
+    jwtProperties: JwtProperties
 ) {
     private val secretKey = Keys.hmacShaKeyFor(
         jwtProperties.key.toByteArray()
     )
 
-    fun generate(userDetails: UserDetails,
+    fun generate(email: String,
                  expirationDate: Date,
                  additionalClaims: Map<String, Any> = emptyMap()
     ): String =
         Jwts.builder()
             .claims()
-            .subject(userDetails.username)
+            .subject(email)
             .issuedAt(Date(System.currentTimeMillis()))
             .expiration(expirationDate)
             .add(additionalClaims)
