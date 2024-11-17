@@ -4,13 +4,12 @@ import com.malykhnik.bulletinboard_kotlin.dto.message_dto.MessageDtoForUpdate
 import com.malykhnik.bulletinboard_kotlin.entity.Message
 import com.malykhnik.bulletinboard_kotlin.entity.Topic
 import com.malykhnik.bulletinboard_kotlin.exception.custom_exception.message_exceptions.MessageAlreadyExistsException
-import com.malykhnik.bulletinboard_kotlin.exception.custom_exception.message_exceptions.MessageForUpdateNotFound
+import com.malykhnik.bulletinboard_kotlin.exception.custom_exception.message_exceptions.MessageForUpdateNotFoundException
 import com.malykhnik.bulletinboard_kotlin.exception.custom_exception.message_exceptions.MessageNotFoundException
 import com.malykhnik.bulletinboard_kotlin.exception.custom_exception.topic_exceptions.CountMessagesInTopicException
 import com.malykhnik.bulletinboard_kotlin.repository.MessageRepository
 import com.malykhnik.bulletinboard_kotlin.service.business_logic.MessageService
 import com.malykhnik.bulletinboard_kotlin.util.WorkWithAuth
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
@@ -29,23 +28,32 @@ class MessageServiceImpl(
     }
 
     override fun updateMessage(messageId: Long, messageDtoForUpdate: MessageDtoForUpdate): Message {
-        val author = WorkWithAuth.getUsernameByAuthUser()
         val messageEntity = messageRepo.findById(messageId)
             .orElseThrow { MessageNotFoundException("Messages by $messageId not found") }
+        if (WorkWithAuth.findAdminRole()) {
+            val updatedMessage = changeMessage(messageEntity, messageDtoForUpdate)
+            return messageRepo.save(updatedMessage)
+        }
+        val author = WorkWithAuth.getUsernameByAuthUser()
         if (messageEntity.author == author) {
             val updatedMessage = changeMessage(messageEntity, messageDtoForUpdate)
             return messageRepo.save(updatedMessage)
         }
-        throw MessageForUpdateNotFound("Message with ID $messageId and author name equals $author not found")
+        throw MessageForUpdateNotFoundException("Message with ID $messageId and author name equals $author not found")
     }
 
     override fun deleteMessage(messageId: Long) {
         if (!messageRepo.existsById(messageId)) {
             throw MessageAlreadyExistsException("Message with ID $messageId not found")
         }
+        val author = WorkWithAuth.getUsernameByAuthUser()
         val messageEntity = messageRepo.findById(messageId).get()
         val topic = messageEntity.topic
-        if (checkMessagesInTopic(topic)) {
+        if (WorkWithAuth.findAdminRole() && checkCountMessagesInTopic(topic)) {
+            topic.messages.remove(messageEntity)
+            return messageRepo.delete(messageEntity)
+        }
+        if (checkAuthorName(messageEntity, author) && checkCountMessagesInTopic(topic)) {
             topic.messages.remove(messageEntity)
             return messageRepo.delete(messageEntity)
         }
@@ -62,8 +70,11 @@ class MessageServiceImpl(
         )
     }
 
-    private fun checkMessagesInTopic(topic: Topic): Boolean {
-        return topic.messages.size > 1
-    }
+    private fun checkAuthorName(message: Message,
+                                author: String?): Boolean = message.author == author
+
+
+    private fun checkCountMessagesInTopic(topic: Topic): Boolean = topic.messages.size > 1
+
 
 }

@@ -1,6 +1,5 @@
 package com.malykhnik.bulletinboard_kotlin.entity
 
-import com.malykhnik.bulletinboard_kotlin.dto.TopicDto
 import jakarta.persistence.*
 
 @Entity

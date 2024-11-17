@@ -12,6 +12,7 @@ class Message(
     val id: Long,
     val author: String,
     val message: String,
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     val date: Date,
 

@@ -1,4 +1,4 @@
-package com.malykhnik.bulletinboard_kotlin.dto
+package com.malykhnik.bulletinboard_kotlin.dto.topic_dto
 
 import com.malykhnik.bulletinboard_kotlin.dto.message_dto.MessageDto
 
