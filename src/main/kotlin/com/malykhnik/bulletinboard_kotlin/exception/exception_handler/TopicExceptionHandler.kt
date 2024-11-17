@@ -1,5 +1,6 @@
 package com.malykhnik.bulletinboard_kotlin.exception.exception_handler
 
+import com.malykhnik.bulletinboard_kotlin.exception.custom_exception.topic_exceptions.CountMessagesInTopicException
 import com.malykhnik.bulletinboard_kotlin.exception.custom_exception.topic_exceptions.TopicAlreadyExistsException
 import com.malykhnik.bulletinboard_kotlin.exception.custom_exception.topic_exceptions.TopicsNotFoundException
 import org.springframework.http.HttpStatus
@@ -18,5 +19,10 @@ class TopicExceptionHandler {
     @ExceptionHandler(TopicsNotFoundException::class)
     fun handleTopicsNotFound(ex: TopicsNotFoundException): ResponseEntity<String> {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.message)
+    }
+
+    @ExceptionHandler(CountMessagesInTopicException::class)
+    fun handleCountMessagesInTopic(ex: CountMessagesInTopicException): ResponseEntity<String> {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.message)
     }
 }

@@ -1,34 +1,32 @@
-package com.malykhnik.bulletinboard_kotlin.rest
+package com.malykhnik.bulletinboard_kotlin.rest.admin_rest
 
-import com.malykhnik.bulletinboard_kotlin.dto.message_dto.MessageDto
 import com.malykhnik.bulletinboard_kotlin.dto.topic_dto.TopicDto
+import com.malykhnik.bulletinboard_kotlin.dto.message_dto.MessageDto
+import com.malykhnik.bulletinboard_kotlin.dto.topic_dto.TopicDtoForUpdate
 import com.malykhnik.bulletinboard_kotlin.entity.Message
 import com.malykhnik.bulletinboard_kotlin.entity.Topic
 import com.malykhnik.bulletinboard_kotlin.service.business_logic.TopicService
 import com.malykhnik.bulletinboard_kotlin.util.WorkWithAuth
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/topics")
-class TopicController(
-    private val topicService: TopicService
+@RequestMapping("/admin/api/topics")
+class TopicControllerAdmin(
+    private val topicsService: TopicService
 ) {
-    @PostMapping("/create")
-    fun createTopic(@RequestBody topicDto: TopicDto): ResponseEntity<TopicDto> {
-        val topicEntity = topicDto.toEntity()
-        return ResponseEntity.ok(topicService.createTopic(topicEntity).toDto())
+    @PatchMapping("/{topicId}")
+    fun updateTopicById(@PathVariable(name = "topicId") topicId: Long,
+                                          @RequestBody topicDtoForUpdate: TopicDtoForUpdate
+    ): ResponseEntity<TopicDto> {
+        return ResponseEntity.ok(topicsService.updateTopic(topicId, topicDtoForUpdate).toDto())
     }
 
-    @GetMapping
-    fun getAllTopics(): ResponseEntity<List<TopicDto>> {
-        return ResponseEntity.ok(topicService.getAllTopics().toDtoList())
+    @DeleteMapping("/{topicId}")
+    fun deleteTopicById(@PathVariable(name = "topicId") topicId: Long
+    ): ResponseEntity<Unit> {
+        return ResponseEntity.ok(topicsService.deleteTopic(topicId))
     }
-
 }
 
 fun TopicDto.toEntity(): Topic {

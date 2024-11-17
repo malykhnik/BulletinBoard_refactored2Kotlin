@@ -25,7 +25,7 @@ class AuthorizationConfiguration(
                 it
                     .requestMatchers("/api/auth","/api/user/save", "api/auth/refresh", "/error").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
-                    .requestMatchers("/api/user**").hasRole("ADMIN")
+                    .requestMatchers("/admin/api/topics", "/admin/api/messages").hasRole("ADMIN")
                     .anyRequest().fullyAuthenticated()
             }
             .sessionManagement {
