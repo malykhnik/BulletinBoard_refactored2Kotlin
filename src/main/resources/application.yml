@@ -17,8 +17,14 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  cache:
+    type: redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 jwt:
   key: weqjfnqbewfoi2371432yogr8qfwwgefb1ffh17803gf18g34fbasdsaf134fqf
-  access-token-expiration: 60000
-  refresh-token-expiration: 180000
+  access-token-expiration: 120000
+  refresh-token-expiration: 360000

@@ -13,7 +13,8 @@ import org.springframework.web.filter.OncePerRequestFilter
 @Component
 class JwtAuthFilter(
     private val userDetailsService: MyUserDetailsService,
-    private val jwtService: JwtService
+    private val jwtService: JwtService,
+    private val tokenBlackList: TokenBlackList
 ): OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -26,6 +27,13 @@ class JwtAuthFilter(
             return
         }
         val jwtToken = authHeader!!.extractTokenValue()
+
+        if (tokenBlackList.isBlackListed(jwtToken) != null) {
+            response.status = HttpServletResponse.SC_UNAUTHORIZED
+            response.writer.write("Token is blacklisted")
+            return
+        }
+
         val email = jwtService.extractEmail(jwtToken)
         if (email != null && SecurityContextHolder.getContext().authentication == null) {
             val foundUser = userDetailsService.loadUserByUsername(email)

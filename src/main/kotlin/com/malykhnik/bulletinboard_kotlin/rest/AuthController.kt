@@ -5,6 +5,8 @@ import com.malykhnik.bulletinboard_kotlin.dto.auth_dto.sign_in_dto.SignInRequest
 import com.malykhnik.bulletinboard_kotlin.dto.auth_dto.sign_in_dto.AuthResponseDto
 import com.malykhnik.bulletinboard_kotlin.service.security_logic.AuthenticationService
 import com.malykhnik.bulletinboard_kotlin.service.security_logic.RefreshTokenService
+import com.malykhnik.bulletinboard_kotlin.service.security_logic.TokenBlackList
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -17,7 +19,8 @@ import org.springframework.web.server.ResponseStatusException
 @RequestMapping("/api/auth")
 class AuthController(
     private val authenticationService: AuthenticationService,
-    private val refreshTokenService: RefreshTokenService
+    private val refreshTokenService: RefreshTokenService,
+    private val tokenBlackList: TokenBlackList
 ) {
     @PostMapping
     fun authenticate(@RequestBody signInRequestDto: SignInRequestDto):
@@ -27,4 +30,20 @@ class AuthController(
     fun refreshJwt(@RequestBody refreshTokenDto: RefreshTokenDto): ResponseEntity<AuthResponseDto> {
         return ResponseEntity.ok(refreshTokenService.refreshJwt(refreshTokenDto))
     }
+
+    @PostMapping("/logout")
+    fun logout(request: HttpServletRequest): ResponseEntity<String> {
+        println("LOGOUT вызван")
+        val token = extractToken(request.getHeader("Authorization"))
+        tokenBlackList.addToBlackList(token)
+        return ResponseEntity.ok("Logged out successfully")
+    }
+
+    private fun extractToken(header: String): String  {
+        return header.extractTokenValue()
+    }
+
+    private fun String.extractTokenValue() =
+        this.substringAfter("Bearer ")
+
 }
