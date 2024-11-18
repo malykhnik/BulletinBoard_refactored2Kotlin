@@ -4,6 +4,9 @@ import com.malykhnik.bulletinboard_kotlin.dto.auth_dto.sign_up_dto.SignUpRequest
 import com.malykhnik.bulletinboard_kotlin.dto.auth_dto.sign_up_dto.SignUpResponseDto
 import com.malykhnik.bulletinboard_kotlin.entity.User
 import com.malykhnik.bulletinboard_kotlin.service.business_logic.UserService
+import com.malykhnik.bulletinboard_kotlin.util.toDto
+import com.malykhnik.bulletinboard_kotlin.util.toEntity
+import com.malykhnik.bulletinboard_kotlin.util.toUserDtoList
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -14,13 +17,12 @@ class UserController(
 ) {
     @PostMapping("/save")
     fun createUser(@RequestBody signUpRequestDto: SignUpRequestDto): ResponseEntity<SignUpResponseDto> {
-        val userEntity = signUpRequestDto.toEntity()
-        return ResponseEntity.ok(userService.createUser(userEntity).toDto())
+        return ResponseEntity.ok(userService.createUser(signUpRequestDto.toEntity()).toDto())
     }
 
     @GetMapping
     fun getAllUsers(): ResponseEntity<List<SignUpResponseDto>> {
-        return ResponseEntity.ok(userService.getAllUsers().toDtoList())
+        return ResponseEntity.ok(userService.getAllUsers().toUserDtoList())
     }
 
     @GetMapping("/{id}")
@@ -35,17 +37,3 @@ class UserController(
 
 }
 
-fun SignUpRequestDto.toEntity() = User(
-    id = id,
-    email = email,
-    password = password,
-    role = role
-)
-
-fun User.toDto() = SignUpResponseDto(
-    id = id,
-    email = email,
-    role = role
-)
-
-fun List<User>.toDtoList(): List<SignUpResponseDto> = this.map { it.toDto() }

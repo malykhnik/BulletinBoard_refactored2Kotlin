@@ -6,7 +6,7 @@ import com.malykhnik.bulletinboard_kotlin.entity.Message
 import com.malykhnik.bulletinboard_kotlin.entity.Topic
 import com.malykhnik.bulletinboard_kotlin.service.business_logic.MessageService
 import com.malykhnik.bulletinboard_kotlin.service.business_logic.TopicService
-import com.malykhnik.bulletinboard_kotlin.util.WorkWithAuth
+import com.malykhnik.bulletinboard_kotlin.util.*
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -25,7 +25,7 @@ class MessageController(
 ) {
     @GetMapping("/{topicId}")
     fun getMessagesInTopicByTopicId(@PathVariable(name = "topicId") topicId: Long): ResponseEntity<List<MessageDto>> {
-        return ResponseEntity.ok(messageService.getMessagesByTopicId(topicId).toDtoList());
+        return ResponseEntity.ok(messageService.getMessagesByTopicId(topicId).toMessageDtoList());
     }
 
     @PostMapping("/{topicId}")
@@ -33,8 +33,7 @@ class MessageController(
                                  @RequestBody messageDto: MessageDto
     ): ResponseEntity<MessageDto> {
         val topicEntity = topicService.getTopicById(topicId)
-        val messageEntity = messageDto.toEntity(topicEntity)
-        return ResponseEntity.ok(messageService.createMessage(messageEntity).toDto())
+        return ResponseEntity.ok(messageService.createMessage(messageDto.toEntity(topicEntity)).toDto())
     }
 
     @PatchMapping("/{messageId}")
@@ -51,23 +50,3 @@ class MessageController(
     }
 }
 
-fun MessageDto.toEntity(topic: Topic): Message {
-    return Message(
-        id = this.id,
-        author = WorkWithAuth.getUsernameByAuthUser()!!,
-        message = this.message,
-        date = this.date!!,
-        topic = topic
-    )
-}
-
-fun Message.toDto(): MessageDto {
-    return MessageDto(
-        id = this.id,
-        author = this.author,
-        message = this.message,
-        date = this.date
-    )
-}
-
-fun List<Message>.toDtoList(): List<MessageDto> = this.map { it.toDto() }

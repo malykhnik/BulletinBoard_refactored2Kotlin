@@ -7,6 +7,7 @@ import com.malykhnik.bulletinboard_kotlin.entity.Message
 import com.malykhnik.bulletinboard_kotlin.entity.Topic
 import com.malykhnik.bulletinboard_kotlin.service.business_logic.TopicService
 import com.malykhnik.bulletinboard_kotlin.util.WorkWithAuth
+import com.malykhnik.bulletinboard_kotlin.util.toDto
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -28,39 +29,3 @@ class TopicControllerAdmin(
         return ResponseEntity.ok(topicsService.deleteTopic(topicId))
     }
 }
-
-fun TopicDto.toEntity(): Topic {
-    val topic = Topic(
-        id = this.id,
-        title = this.title
-    )
-    topic.messages.addAll(
-        this.messages.map { messageDto ->
-            Message(
-                id = messageDto.id,
-                author = WorkWithAuth.getUsernameByAuthUser()!!,
-                message = messageDto.message,
-                date = messageDto.date!!,
-                topic = topic
-            )
-        }
-    )
-    return topic
-}
-
-fun Topic.toDto(): TopicDto {
-    return TopicDto(
-        id = this.id,
-        title = this.title,
-        messages = this.messages.map { message ->
-            MessageDto(
-                id = message.id,
-                author = message.author,
-                message = message.message,
-                date = message.date
-            )
-        }.toMutableList()
-    )
-}
-
-fun List<Topic>.toDtoList(): List<TopicDto> = this.map { it.toDto() }

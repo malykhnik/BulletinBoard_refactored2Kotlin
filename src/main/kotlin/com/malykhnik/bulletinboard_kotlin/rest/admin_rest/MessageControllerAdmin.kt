@@ -2,8 +2,8 @@ package com.malykhnik.bulletinboard_kotlin.rest.admin_rest
 
 import com.malykhnik.bulletinboard_kotlin.dto.message_dto.MessageDto
 import com.malykhnik.bulletinboard_kotlin.dto.message_dto.MessageDtoForUpdate
-import com.malykhnik.bulletinboard_kotlin.rest.toDto
 import com.malykhnik.bulletinboard_kotlin.service.business_logic.MessageService
+import com.malykhnik.bulletinboard_kotlin.util.toDto
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 

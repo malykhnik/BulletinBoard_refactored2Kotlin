@@ -33,9 +33,7 @@ class AuthController(
 
     @PostMapping("/logout")
     fun logout(request: HttpServletRequest): ResponseEntity<String> {
-        println("LOGOUT вызван")
-        val token = extractToken(request.getHeader("Authorization"))
-        tokenBlackList.addToBlackList(token)
+        tokenBlackList.addToBlackList(extractToken(request.getHeader("Authorization")))
         return ResponseEntity.ok("Logged out successfully")
     }
 
